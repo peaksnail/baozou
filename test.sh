@@ -17,7 +17,7 @@ fi
 }
  net()  {
      declare -i on=0
-     on=`ifconfig | grep 222.25.181.12 | wc -l` 
+     on=`ifconfig | grep "yourip" | wc -l` 
      if [ $on -eq 0 ];then
         echo "network is down now"
         exit
