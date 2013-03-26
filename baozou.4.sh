@@ -1,8 +1,7 @@
 #-------------
 #  psnil 
-#  2013-3-26
-#  pm 20:00
-#  文件目录组织有点差阿,需要锻炼
+#  2013-3-3
+#  pm 16:00
 #-------------
 #!/bin/bash  
 #set -x #调试
@@ -12,20 +11,21 @@ declare -i count=0
 declare -i exist=0
 declare -a src
 declare -i test=1
-filename=`date +"%Y_%m_%d"`.zip
+zipfile=`date +"%Y_%m_%d"`.zip
+pdffile=`date +"%Y_%m_%d"`.pdf
 
 # 判断smtp是否启动
-source test.sh              #用来判断各项服务是否开启了
+source /home/psnail/Documents/programs/shell/baozou/test.sh
 smtp
 net
 
 echo "begin collect..."
 
-pwd=`pwd`                   #这些可以自己设置路径
-tmp=/tmp/$$                 #下载urlfile所指路径的网页，下载上面的图片链接
-des=pic/                    #下载后存放图片的文件夹
-urlfile=baozou_url          #存放要下载的暴走图片所在网站的url   
-data=baozou_data            #存放已经下载过的暴走 图片的url
+pwd=`pwd`
+tmp=/tmp/$$                                                             #下载urlfile所指路径的网页，下载上面的图片链接
+des=/home/psnail/Documents/programs/shell/baozou/pic/                  #下载后存放图片的文件夹
+urlfile=/home/psnail/Documents/programs/shell/baozou/baozou_url          #存放要下载的暴走图片所在网站的url   
+data=/home/psnail/Documents/programs/shell/baozou/baozou_data  #存放已经下载过的暴走 图片的url
 
 #取得url列表
 for url in `cat $urlfile`
@@ -77,11 +77,12 @@ rm $tmp
             fi
 
         #里采用convert合成图片为一张pdf来发送
-	    convert * +compress baozou.pdf
-	    zip -m $filename baozou.pdf
+	    convert * +compress $pdffile
+	    zip -m $zipfile $pdffile
         echo -n  "mutt now ... wait... the size of file is :"
-        echo `du -h $filename`
-	    echo "kindle" | mutt -s "baozou" XXXXXXXXXX@free.kindle.com -a $filename  
+        echo `du -h $zipfile`
+	    echo "kindle" | mutt -s "baozou" 513322938@free.kindle.com -a $zipfile  
+        echo "kindle" | mutt -s "baozou" lucienfeel@free.kindle.com -a $zipfile
         echo "mutt ok!"
 	    rm *
 	    cd $pwd
